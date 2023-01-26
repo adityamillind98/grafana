@@ -63,7 +63,7 @@ function withTemplateVariableOptions(optionsPromise: Promise<string[]>, filter?:
 // it is possible to add fields into the `InfluxQueryTag` structures, and they do work,
 // but in some cases, when we do metadata queries, we have to remove them from the queries.
 function filterTags(parts: InfluxQueryTag[], allTagKeys: Set<string>): InfluxQueryTag[] {
-  return parts.filter((t) => allTagKeys.has(t.key));
+  return parts.filter((t) => t.key.endsWith('::tag') || allTagKeys.has(t.key + '::tag'));
 }
 
 export const Editor = (props: Props): JSX.Element => {
@@ -80,6 +80,7 @@ export const Editor = (props: Props): JSX.Element => {
     const tagKeys = (await getTagKeysForMeasurementAndTags(measurement, policy, [], datasource)).map(
       (tag) => `${tag}::tag`
     );
+
     const fieldKeys = (await getFieldKeysForMeasurement(measurement || '', policy, datasource)).map(
       (field) => `${field}::field`
     );
@@ -150,6 +151,7 @@ export const Editor = (props: Props): JSX.Element => {
               allTagKeys.then((keys) =>
                 getAllMeasurementsForTags(
                   filter === '' ? undefined : filter,
+                  // (query.tags ?? []).filter((tag) => tag.key.endsWith('::tag')),
                   filterTags(query.tags ?? [], keys),
                   datasource
                 )
@@ -169,7 +171,14 @@ export const Editor = (props: Props): JSX.Element => {
           getTagValueOptions={(key: string) =>
             withTemplateVariableOptions(
               allTagKeys.then((keys) =>
-                getTagValues(key, measurement, policy, filterTags(query.tags ?? [], keys), datasource)
+                getTagValues(
+                  key,
+                  measurement,
+                  policy,
+                  // (query.tags ?? []).filter((tag) => tag.key.endsWith('::tag')),
+                  filterTags(query.tags ?? [], keys),
+                  datasource
+                )
               )
             )
           }
