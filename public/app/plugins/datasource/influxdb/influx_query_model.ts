@@ -180,7 +180,7 @@ export default class InfluxQueryModel {
       escapedKey = `"${tag.key.slice(0, -7)}"::field`;
     }
 
-    return str + '"' + escapedKey + '" ' + operator + ' ' + value;
+    return str + escapedKey + ' ' + operator + ' ' + value;
   }
 
   getMeasurementAndPolicy(interpolate: any) {
