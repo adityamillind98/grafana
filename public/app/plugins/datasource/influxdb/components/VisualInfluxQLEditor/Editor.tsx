@@ -151,7 +151,6 @@ export const Editor = (props: Props): JSX.Element => {
               allTagKeys.then((keys) =>
                 getAllMeasurementsForTags(
                   filter === '' ? undefined : filter,
-                  // (query.tags ?? []).filter((tag) => tag.key.endsWith('::tag')),
                   filterTags(query.tags ?? [], keys),
                   datasource
                 )
@@ -171,14 +170,7 @@ export const Editor = (props: Props): JSX.Element => {
           getTagValueOptions={(key: string) =>
             withTemplateVariableOptions(
               allTagKeys.then((keys) =>
-                getTagValues(
-                  key,
-                  measurement,
-                  policy,
-                  // (query.tags ?? []).filter((tag) => tag.key.endsWith('::tag')),
-                  filterTags(query.tags ?? [], keys),
-                  datasource
-                )
+                getTagValues(key, measurement, policy, filterTags(query.tags ?? [], keys), datasource)
               )
             )
           }
