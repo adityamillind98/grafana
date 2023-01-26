@@ -11,7 +11,6 @@ const runExploreQuery = (
 ): Promise<Array<{ text: string }>> => {
   const builder = new InfluxQueryBuilder(target, datasource.database);
   const q = builder.buildExploreQuery(type, withKey, withMeasurementFilter);
-
   return datasource.metricFindQuery(q);
 };
 
@@ -56,7 +55,6 @@ export async function getTagValues(
   }
 
   const data = await runExploreQuery('TAG_VALUES', tagKey, undefined, target, datasource);
-
   return data.map((item) => item.text);
 }
 
