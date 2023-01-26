@@ -43,13 +43,6 @@ func (query *Query) Build(queryContext *backend.QueryDataRequest) (string, error
 	return res, nil
 }
 
-func TrimSuffix(s, suffix string) string {
-	if strings.HasSuffix(s, suffix) {
-		s = s[:len(s)-len(suffix)]
-	}
-	return s
-}
-
 func (query *Query) renderTags() []string {
 	res := make([]string, 0, len(query.Tags))
 	for i, tag := range query.Tags {
@@ -87,11 +80,11 @@ func (query *Query) renderTags() []string {
 		escapedKey := fmt.Sprintf(`"%s"`, tag.Key)
 
 		if strings.HasSuffix(tag.Key, "::tag") {
-			escapedKey = fmt.Sprintf(`"%s"::tag`, TrimSuffix(tag.Key, "::tag"))
+			escapedKey = fmt.Sprintf(`"%s"::tag`, strings.TrimSuffix(tag.Key, "::tag"))
 		}
 
 		if strings.HasSuffix(tag.Key, "::field") {
-			escapedKey = fmt.Sprintf(`"%s"::field`, TrimSuffix(tag.Key, "::field"))
+			escapedKey = fmt.Sprintf(`"%s"::field`, strings.TrimSuffix(tag.Key, "::field"))
 		}
 
 		res = append(res, fmt.Sprintf(`%s%s %s %s`, str, escapedKey, tag.Operator, textValue))
