@@ -377,11 +377,6 @@ var (
 			State:       FeatureStateAlpha,
 		},
 		{
-			Name:        "sessionRemoteCache",
-			Description: "Enable using remote cache for user sessions",
-			State:       FeatureStateAlpha,
-		},
-		{
 			Name:        "disablePrometheusExemplarSampling",
 			Description: "Disable Prometheus examplar sampling",
 			State:       FeatureStateStable,
