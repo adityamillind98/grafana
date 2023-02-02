@@ -33,7 +33,21 @@ const VIEWS = {
   state: RuleListStateView,
 };
 
-const onExport = () => window.open(`/api/v1/provisioning/alert-rules/export?download=true`);
+const onExport = () => {
+  const exportURL = `/api/v1/provisioning/alert-rules/export?download=true`;
+  fetch(exportURL, { headers: { Accept: 'yaml' } })
+    .then((response) => response.blob())
+    .then((blob) => {
+      const _url = window.URL.createObjectURL(blob);
+      const downloadLink = document.createElement('a');
+      downloadLink.href = _url;
+      downloadLink.download = 'export.yaml';
+      downloadLink.click();
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
 
 const RuleList = withErrorBoundary(
   () => {
